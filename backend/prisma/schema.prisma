@@ -1,0 +1,95 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum BookingStatus {
+  PENDING
+  ASSIGNED
+  ON_THE_WAY
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+enum MechanicStatus {
+  AVAILABLE
+  BUSY
+  OFF_DUTY
+}
+
+enum ServiceCategory {
+  OIL_CHANGE
+  BRAKE_SERVICE
+  TYRE_SERVICE
+  BATTERY_SERVICE
+  ENGINE_DIAGNOSTIC
+  AC_SERVICE
+  FULL_SERVICE
+  ELECTRICAL
+  SUSPENSION
+  TRANSMISSION
+  DETAILING
+  ROADSIDE_ASSISTANCE
+}
+
+model Customer {
+  id          String    @id @default(cuid())
+  name        String
+  email       String    @unique
+  phone       String
+  address     String?   @db.VarChar(255)
+  city        String
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  bookings    Booking[]
+
+  @@map("customers")
+}
+
+model Mechanic {
+  id              String         @id @default(cuid())
+  name            String
+  email           String         @unique
+  phone           String
+  specialization  Json
+  status          MechanicStatus @default(AVAILABLE)
+  rating          Float          @default(4.5)
+  jobsCompleted   Int            @default(0)
+  location        String?
+  latitude        Float?
+  longitude       Float?
+  joinedAt        DateTime       @default(now())
+  updatedAt       DateTime       @updatedAt
+  bookings        Booking[]
+
+  @@map("mechanics")
+}
+
+model Booking {
+  id              String          @id @default(cuid())
+  bookingNumber   String          @unique
+  customer        Customer        @relation(fields: [customerId], references: [id])
+  customerId      String
+  mechanic        Mechanic?       @relation(fields: [mechanicId], references: [id])
+  mechanicId      String?
+  vehicleMake     String
+  vehicleModel    String
+  vehicleYear     Int
+  vehiclePlate    String
+  service         ServiceCategory
+  serviceDetails  String?         @db.VarChar(500)
+  status          BookingStatus   @default(PENDING)
+  amount          Float
+  scheduledAt     DateTime
+  completedAt     DateTime?
+  notes           String?         @db.VarChar(500)
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@map("bookings")
+}
