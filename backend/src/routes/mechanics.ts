@@ -31,8 +31,8 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
     const where: Prisma.MechanicWhereInput = {};
     if (query.search) {
       where.OR = [
-        { name: { contains: query.search, mode: 'insensitive' } },
-        { email: { contains: query.search, mode: 'insensitive' } },
+        { name: { contains: query.search } },
+        { email: { contains: query.search } },
       ];
     }
     if (query.status) where.status = query.status;
