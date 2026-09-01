@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -42,7 +42,7 @@ model Customer {
   name        String
   email       String    @unique
   phone       String
-  address     String?   @db.VarChar(255)
+  address     String?
   city        String
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
@@ -52,19 +52,19 @@ model Customer {
 }
 
 model Mechanic {
-  id              String         @id @default(cuid())
+  id              String            @id @default(cuid())
   name            String
-  email           String         @unique
+  email           String            @unique
   phone           String
-  specialization  Json
-  status          MechanicStatus @default(AVAILABLE)
-  rating          Float          @default(4.5)
-  jobsCompleted   Int            @default(0)
+  specialization  ServiceCategory[]
+  status          MechanicStatus    @default(AVAILABLE)
+  rating          Float             @default(4.5)
+  jobsCompleted   Int               @default(0)
   location        String?
   latitude        Float?
   longitude       Float?
-  joinedAt        DateTime       @default(now())
-  updatedAt       DateTime       @updatedAt
+  joinedAt        DateTime          @default(now())
+  updatedAt       DateTime          @updatedAt
   bookings        Booking[]
 
   @@map("mechanics")
@@ -82,12 +82,12 @@ model Booking {
   vehicleYear     Int
   vehiclePlate    String
   service         ServiceCategory
-  serviceDetails  String?         @db.VarChar(500)
+  serviceDetails  String?
   status          BookingStatus   @default(PENDING)
   amount          Float
   scheduledAt     DateTime
   completedAt     DateTime?
-  notes           String?         @db.VarChar(500)
+  notes           String?
   createdAt       DateTime        @default(now())
   updatedAt       DateTime        @updatedAt
 

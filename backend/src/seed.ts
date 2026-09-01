@@ -178,7 +178,7 @@ async function main() {
           name,
           email: `${name.toLowerCase().replace(/[' ]/g, '.').replace('..', '.')}@instantmechanic.com`,
           phone: generatePhone(),
-          specialization: mechanicSpecializations[i % mechanicSpecializations.length] as unknown as import('@prisma/client').Prisma.InputJsonValue,
+          specialization: mechanicSpecializations[i % mechanicSpecializations.length],
           status,
           rating: randFloat(3.8, 5.0),
           jobsCompleted: randInt(20, 450),

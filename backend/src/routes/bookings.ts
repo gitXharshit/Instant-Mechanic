@@ -73,11 +73,11 @@ router.get('/', async (req: Request, res: Response, next: NextFunction) => {
 
     if (query.search) {
       where.OR = [
-        { bookingNumber: { contains: query.search } },
-        { customer: { name: { contains: query.search } } },
-        { vehicleMake: { contains: query.search } },
-        { vehicleModel: { contains: query.search } },
-        { vehiclePlate: { contains: query.search } },
+        { bookingNumber: { contains: query.search, mode: 'insensitive' } },
+        { customer: { name: { contains: query.search, mode: 'insensitive' } } },
+        { vehicleMake: { contains: query.search, mode: 'insensitive' } },
+        { vehicleModel: { contains: query.search, mode: 'insensitive' } },
+        { vehiclePlate: { contains: query.search, mode: 'insensitive' } },
       ];
     }
 

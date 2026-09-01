@@ -79,7 +79,7 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
       }),
     ]);
 
-    // Bookings over last 30 days — MySQL compatible
+    // Bookings over last 30 days
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
 
@@ -87,12 +87,12 @@ router.get('/', async (_req: Request, res: Response, next: NextFunction) => {
       { date: string; count: bigint; revenue: number }[]
     >`
       SELECT
-        DATE(scheduledAt) AS date,
-        CAST(COUNT(*) AS UNSIGNED) AS count,
-        COALESCE(SUM(CASE WHEN status = 'COMPLETED' THEN amount ELSE 0 END), 0) AS revenue
+        DATE("scheduledAt") as date,
+        COUNT(*)::bigint as count,
+        COALESCE(SUM(CASE WHEN status = 'COMPLETED' THEN amount ELSE 0 END), 0) as revenue
       FROM bookings
-      WHERE scheduledAt >= ${thirtyDaysAgo}
-      GROUP BY DATE(scheduledAt)
+      WHERE "scheduledAt" >= ${thirtyDaysAgo}
+      GROUP BY DATE("scheduledAt")
       ORDER BY date ASC
     `;
 
