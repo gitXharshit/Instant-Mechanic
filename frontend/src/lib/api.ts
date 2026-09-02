@@ -11,7 +11,7 @@ import type {
   BookingStatus,
 } from '@/types';
 
-const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000';
+const API_BASE = process.env.NEXT_PUBLIC_API_URL || 'https://instant-mechanic-hq4o.onrender.com';
 
 class ApiError extends Error {
   constructor(
